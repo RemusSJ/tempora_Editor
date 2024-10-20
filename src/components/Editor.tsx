@@ -10,17 +10,18 @@ import { Menu } from "./Menu";
 import { TimeLine } from "./TimeLine";
 import { Store } from "@/store/Store";
 import "@/utils/fabric-utils";
+import { exportWAV, convertWavToMp3 } from '../utils/audioExports'; // Adjust this import as per your file structure
 
 export const EditorWithStore = () => {
   const [store] = useState(new Store());
   return (
     <StoreContext.Provider value={store}>
-      <Editor></Editor>
+      <Editor />
     </StoreContext.Provider>
   );
-}
+};
 
-export const Editor = observer(() => {
+const Editor = observer(() => {
   const store = React.useContext(StoreContext);
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export const Editor = observer(() => {
     fabric.Object.prototype.cornerStyle = "circle";
     fabric.Object.prototype.cornerStrokeColor = "#0063d8";
     fabric.Object.prototype.cornerSize = 10;
-    // canvas mouse down without target should deselect active object
+
     canvas.on("mouse:down", function (e) {
       if (!e.target) {
         store.setSelectedElement(null);
@@ -46,10 +47,12 @@ export const Editor = observer(() => {
       canvas.renderAll();
       fabric.util.requestAnimFrame(render);
     });
-  }, []);
+  }, [store]);
+
+ 
+
   return (
     <div className="grid grid-rows-[500px_1fr_20px] grid-cols-[72px_300px_1fr_250px] h-[100svh]">
-
       <div className="tile row-span-2 flex flex-col">
         <Menu />
       </div>
@@ -65,9 +68,13 @@ export const Editor = observer(() => {
       <div className="col-start-3 row-start-2 col-span-2 relative px-[10px] py-[4px] overflow-scroll">
         <TimeLine />
       </div>
+      {/* Add export buttons here */}
       <div className="col-span-4 text-right px-2 text-[0.5em] bg-black text-white">
-        Crafted By Amit Digga
+        Crafted By Sakshat Joshi
       </div>
     </div>
   );
 });
+
+// Use named export, since `EditorWithStore` is the default component
+export default EditorWithStore;

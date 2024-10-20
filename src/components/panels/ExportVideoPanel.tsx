@@ -1,10 +1,34 @@
 "use client";
+
 import React from "react";
 import { StoreContext } from "@/store";
 import { observer } from "mobx-react";
+import { exportWAV, convertWavToMp3 } from "@/utils/audioExports"; // Adjust the import path as necessary
 
 export const ExportVideoPanel = observer(() => {
   const store = React.useContext(StoreContext);
+
+  // Function to handle WAV export
+  const handleExportWav = () => {
+    const audioElement = document.querySelector('audio'); // Make sure this selector matches your audio element
+    if (audioElement) {
+      exportWAV(audioElement);
+    } else {
+      console.log("Audio element not found");
+    }
+  };
+
+  // Function to handle MP3 export
+  const handleExportMp3 = () => {
+    const audioElement = document.querySelector('audio'); // Make sure this selector matches your audio element
+    if (audioElement) {
+      exportWAV(audioElement).then((wavBlob) => {
+        convertWavToMp3(wavBlob);
+      });
+    } else {
+      console.log("Audio element not found");
+    }
+  };
 
   return (
     <>
@@ -31,7 +55,7 @@ export const ExportVideoPanel = observer(() => {
           <div className="text-xs mr-2">Todo</div>
         </div>
       </div>
-      {/*  Format selection with radio button */}
+      {/* Format selection with radio button */}
       <div className="px-[16px]">
         <div className="text-xs font-semibold mr-2">Video Format:</div>
         <div className="flex flex-row items-center my-2">
@@ -50,7 +74,7 @@ export const ExportVideoPanel = observer(() => {
             type="radio"
             className="mr-2"
             name="video-format"
-            value="gif"
+            value="webm"
             checked={store.selectedVideoFormat === "webm"}
             onChange={(e) => {
               store.setVideoFormat("webm");
@@ -60,6 +84,7 @@ export const ExportVideoPanel = observer(() => {
         </div>
       </div>
 
+      {/* Export video button */}
       <button
         className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-1 rounded-lg m-4"
         onClick={() => {
@@ -73,6 +98,23 @@ export const ExportVideoPanel = observer(() => {
       >
         Export Video ({store.maxTime / 1000} secs) {store.selectedVideoFormat === "mp4" ? ("ALPHA") : ""}
       </button>
+
+      {/* Export WAV and MP3 buttons */}
+      <div className="px-[16px]">
+        <div className="text-xs font-semibold mr-2">Export Audio:</div>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-lg m-4"
+          onClick={handleExportWav}
+        >
+          Export as WAV
+        </button>
+        <button
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded-lg m-4"
+          onClick={handleExportMp3}
+        >
+          Export as MP3
+        </button>
+      </div>
     </>
   );
 });
