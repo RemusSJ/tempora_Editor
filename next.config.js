@@ -1,5 +1,7 @@
+const withBuilderDevTools = require("@builder.io/dev-tools/next")();
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withBuilderDevTools({
   webpack: (config) => {
     config.externals.push({
       sharp: "commonjs sharp",
@@ -7,6 +9,6 @@ const nextConfig = {
     });
     return config;
   },
-};
+});
 
 module.exports = nextConfig;

@@ -14,6 +14,9 @@
     "os": false
   },
   "dependencies": {
+    "@builder.io/dev-tools": "^1.1.36",
+    "@builder.io/react": "^6.0.4",
+    "@builder.io/sdk": "^4.0.3",
     "@ffmpeg/ffmpeg": "^0.12.6",
     "@ffmpeg/util": "^0.12.1",
     "@types/fabric": "^5.3.3",
